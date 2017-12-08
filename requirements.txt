@@ -1,0 +1,6 @@
+click==6.7
+matplotlib==2.1.0
+numpy==1.13.3
+pydicom==0.9.9
+pypng==0.0.18
+scikit-image==0.13.1
