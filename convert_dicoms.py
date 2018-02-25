@@ -10,6 +10,8 @@ to have only one image
 # Standard-library imports
 import os
 import itertools as it
+import random
+import math
 
 
 # Third-party imports
