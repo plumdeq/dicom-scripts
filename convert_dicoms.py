@@ -12,6 +12,11 @@ import os
 import itertools as it
 import random
 import math
+import glob
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 # Third-party imports
@@ -23,12 +28,15 @@ import dicom
 from tqdm import tqdm
 
 
-def collect_dicoms(path_to_walk):
+def collect_dicoms(path_to_walk, dcm_regexp):
     """Collects all dicom files in the given path"""
-    all_files = [os.path.join(dir_name, f) 
-                 for dir_name, _ , files in os.walk(path_to_walk)
-                 for f in files]
-                 # if ".dcm" in f.lower()]
+    # all_files = [os.path.join(dir_name, f) 
+    #              for dir_name, _ , files in os.walk(path_to_walk)
+    #              for f in files]
+    #              # if ".dcm" in f.lower()]
+
+    logger.info("globbing {} with {}".format(path_to_walk, dcm_regexp))
+    all_files = list(glob.glob(path_to_walk + dcm_regexp, recursive=True))
 
     return all_files
 
@@ -41,6 +49,10 @@ def convert_dicoms(dicoms, dest, export_name):
     """
     n_total = len(dicoms)
     n_problems = 0
+
+    if n_total == 0:
+        logger.info("No dicoms to convert")
+        return None
 
     for i, f in enumerate(tqdm(dicoms, desc="exporting image from DICOM")):
         try:
